@@ -67,6 +67,15 @@ def find_nearest():
                         q.enqueue(new_path)
                         q1.append(next_added_path)
 
+def backtrack():
+    while len(player.current_room.get_exits()) <= 2:
+        traversal_path.append(v[player.current_room.id])
+        player.travel(v[player.current_room.id])
+        dirs = player.current_room.get_exits()
+        random.shuffle(dirs)
+        for direction in dirs:
+            if player.current_room.get_room_in_direction(direction).id not in v:
+                break
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
@@ -91,14 +100,7 @@ while True:
     if traveled is False:
         if len(v) < len(room_graph):
             if len(player.current_room.get_exits()) == 1:
-                while len(player.current_room.get_exits()) <= 2:
-                    traversal_path.append(v[player.current_room.id])
-                    player.travel(v[player.current_room.id])
-                    dirs = player.current_room.get_exits()
-                    random.shuffle(dirs)
-                    for direction in dirs:
-                        if player.current_room.get_room_in_direction(direction).id not in v:
-                            break
+                backtrack()
             else:
                 find_nearest()
         else:
@@ -114,7 +116,7 @@ for move in traversal_path:
     visited_rooms.add(player.current_room)
 
 if len(visited_rooms) == len(room_graph):
-    print(traversal_path)
+    # print(traversal_path)
     print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
